@@ -37,6 +37,7 @@ public class ClientController {
     public void disconnect() throws IOException {
         socket.close();
     }
+    //ee
 
     private class Client extends Thread {
         private ObjectInputStream ois;
