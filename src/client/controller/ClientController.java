@@ -38,7 +38,7 @@ public class ClientController {
         socket.close();
     }
     //ee
-    //eeeeee eee
+    //eeeeee eee ee
 
     private class Client extends Thread {
         private ObjectInputStream ois;
