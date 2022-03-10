@@ -1,5 +1,6 @@
 package server.controller;
 
+import model.Message;
 import model.ServerUpdate;
 import model.User;
 import server.view.MainFrame;
@@ -13,28 +14,35 @@ import java.util.ArrayList;
 //När en client ansluter sig skapas en ny instans av klassen ClientConnection.
 public class ServerController {
     private MainFrame view;
-    private ArrayList<User> connectedUsers;
     private int port = 721;
+    private ArrayList<ClientConnection> activeClients;
 
     public ServerController(){
         this.view = new MainFrame(this, 900, 600);
         new Connection(721, this).start();
-        connectedUsers = new ArrayList<User>();
+        activeClients = new ArrayList<ClientConnection>();
+    }
+
+    public void newMessage(Message msg) {
+        User[] recipiants = msg.getRecipients();
+
+        for(int i = 0; i < activeClients.size(); i++){
+            for(int j = 0; j < recipiants.length; j++){
+                if(activeClients.get(i).getUser() == recipiants[j]){
+                    activeClients.get(i).addMessageToBuffer(msg);
+                    break;
+                }
+            }
+        }
     }
 
     private class Connection extends Thread {
         private int port;
         private ServerController controller;
-        private ArrayList<ClientConnection> activeClients = new ArrayList<>();
 
         public Connection(int port, ServerController controller) {
-
             this.port = port;
             this.controller = controller;
-        }
-
-        public ArrayList<ClientConnection> getActiveClients(){
-            return activeClients;
         }
 
         //TODO
@@ -50,7 +58,10 @@ public class ServerController {
                         socket = serverSocket.accept(); //När en klient kommer skapas en ny socket
                         ClientConnection client = new ClientConnection(socket, controller); //en ny instans av clientHandler instanseras med socket som parameter.
                         activeClients.add(client);
-                        newUserConnected(client.getUser());
+                        ServerUpdate update = newUserConnected(client.getUser());
+                        for(int i = 0; i < activeClients.size(); i++){
+                            activeClients.get(i).updateClient(update);
+                        }
 
                     } catch(IOException e) {
                         System.err.println(e);
@@ -63,9 +74,13 @@ public class ServerController {
         }
     }
 
-    public void newUserConnected(User user){
+    public ServerUpdate newUserConnected(User user){
+        ArrayList<User> connectedUsers = new ArrayList<User>();
+        for(int i = 0; i < activeClients.size(); i++){
+            connectedUsers.set(i, activeClients.get(i).getUser());
+        }
         ServerUpdate update = new ServerUpdate(user, connectedUsers);
-        connectedUsers.add(user);
+        return update;
     }
 
 

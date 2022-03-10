@@ -28,4 +28,20 @@ public class Message {
     public void setIcon(Icon icon) {
         this.icon = icon;
     }
+
+    public User getSender() {
+        return sender;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
+
+    public User[] getRecipients() {
+        return recipients;
+    }
+
+    public void setRecipients(User[] recipients) {
+        this.recipients = recipients;
+    }
 }

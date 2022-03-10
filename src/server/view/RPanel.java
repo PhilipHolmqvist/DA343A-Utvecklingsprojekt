@@ -1,4 +1,10 @@
 package server.view;
 
-public class RPanel {
+import javax.swing.*;
+
+public class RPanel extends JPanel {
+
+    public RPanel(){
+
+    }
 }

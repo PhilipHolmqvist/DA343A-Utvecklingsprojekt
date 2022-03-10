@@ -9,7 +9,7 @@ public class MainFrame extends JFrame {
     private ServerController controller;
 
     public MainFrame(ServerController controller, int width, int height) {
-        super("Chatt Server");
+        super("Server");
         this.setResizable(false);
         this.setSize(width, height);
         this.mainPanel = new MainPanel(controller, width, height);
