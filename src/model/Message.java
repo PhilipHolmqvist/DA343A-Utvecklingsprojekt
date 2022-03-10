@@ -5,6 +5,8 @@ import javax.swing.*;
 public class Message {
     private String text;
     private Icon icon;
+    private User sender;
+    private User[] recipients;
 
     public Message(String text, Icon icon){
         this.text = text;

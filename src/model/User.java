@@ -10,6 +10,10 @@ public class User {
 
     }
 
+    public User(String username, Icon icon){
+
+    }
+
     public String getUsername() {
         return username;
     }

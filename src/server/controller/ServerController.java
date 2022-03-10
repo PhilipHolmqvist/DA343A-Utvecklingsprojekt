@@ -1,29 +1,40 @@
 package server.controller;
 
+import model.ServerUpdate;
 import model.User;
 import server.view.MainFrame;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 //Servern är en flertrådad server där varje klient hanteras av en tråd.
 //När en client ansluter sig skapas en ny instans av klassen ClientConnection.
 public class ServerController {
     private MainFrame view;
-    private User user;
+    private ArrayList<User> connectedUsers;
+    private int port = 721;
 
     public ServerController(){
         this.view = new MainFrame(this, 900, 600);
-
-        new Connection(422).start(); //Byt till korrekt port.
+        new Connection(721, this).start();
+        connectedUsers = new ArrayList<User>();
     }
 
     private class Connection extends Thread {
         private int port;
+        private ServerController controller;
+        private ArrayList<ClientConnection> activeClients = new ArrayList<>();
 
-        public Connection(int port) {
+        public Connection(int port, ServerController controller) {
+
             this.port = port;
+            this.controller = controller;
+        }
+
+        public ArrayList<ClientConnection> getActiveClients(){
+            return activeClients;
         }
 
         //TODO
@@ -37,11 +48,12 @@ public class ServerController {
                 while(true) {
                     try {
                         socket = serverSocket.accept(); //När en klient kommer skapas en ny socket
-                        new ClientConnection(socket); //en ny instans av clientHandler instanseras med socket som parameter.
+                        ClientConnection client = new ClientConnection(socket, controller); //en ny instans av clientHandler instanseras med socket som parameter.
+                        activeClients.add(client);
+                        newUserConnected(client.getUser());
+
                     } catch(IOException e) {
                         System.err.println(e);
-                        if(socket!=null)
-                            socket.close();
                     }
                 }
             } catch(IOException e) {
@@ -51,9 +63,16 @@ public class ServerController {
         }
     }
 
+    public void newUserConnected(User user){
+        ServerUpdate update = new ServerUpdate(user, connectedUsers);
+        connectedUsers.add(user);
+    }
+
 
 
     public static void main(String[] args) {
+
         new ServerController();
+        //Startar servern
     }
 }
