@@ -15,6 +15,7 @@ public class ClientConnection extends Thread{
         private ObjectOutputStream oos;
         private User user;
         private Buffer<Message> messageBuffer;
+        private Boolean firstConnect = true;
 
         public ClientConnection(Socket socket, ServerController controller) throws IOException {
             this.socket = socket;
@@ -35,29 +36,19 @@ public class ClientConnection extends Thread{
         public void run() {
 
             try{
-                while (true){
+                while(true){
+
+                if(firstConnect) {
                     Object obj = ois.readObject();
-                    if(obj instanceof User){ //Ny användare har anslutit sig till servern
+                    if (obj instanceof User) { //Ny användare har anslutit sig till servern
                         //Logga att en ny användare är online.
                         //Skicka uppdatering till Klienter att en ny användare är online.
                         this.user = (User) obj;
-
-
-                    }else if(obj instanceof Message){ //En användare vill skicka ett meddlande.
-                       //Logga att Message är mottaget av server.
-                       //Skicka Message till recipients.
-                       Message msg = (Message) obj;
-                       controller.newMessage(msg);
                     }
+                }
 
-                    //Kolla om där finns ett msg i bufferten som ska skickas.
-                    Message msg = messageBuffer.get();
-                    if(msg != null){
-                        oos.writeObject(msg);
-                        oos.flush();
-                    }
-
-
+                Message msg = (Message) ois.readObject();
+                controller.newMessage(msg);
 
                 }
             }catch (Exception e) {
@@ -68,6 +59,14 @@ public class ClientConnection extends Thread{
     public void updateClient(ServerUpdate update) {
             try{
                 oos.writeObject(update);
+            }catch (Exception e){
+                System.out.println(e);
+            }
+    }
+
+    public void newMsgForClient(Message msg){
+            try {
+                oos.writeObject(msg);
             }catch (Exception e){
                 System.out.println(e);
             }

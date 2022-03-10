@@ -29,7 +29,7 @@ public class ServerController {
         for(int i = 0; i < activeClients.size(); i++){
             for(int j = 0; j < recipiants.length; j++){
                 if(activeClients.get(i).getUser() == recipiants[j]){
-                    activeClients.get(i).addMessageToBuffer(msg);
+                    activeClients.get(i).newMsgForClient(msg);
                     break;
                 }
             }

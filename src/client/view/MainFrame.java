@@ -1,6 +1,8 @@
 package client.view;
 
 import client.controller.ClientController;
+import model.Message;
+
 import javax.swing.*;
 
 public class MainFrame extends JFrame {
@@ -18,5 +20,9 @@ public class MainFrame extends JFrame {
         this.setVisible(true);
         this.controller = controller;   //Skapar basfönster
 
+    }
+
+    public void displayNewMessage(Message msg) {
+        System.out.println(msg.getText());
     }
 }
