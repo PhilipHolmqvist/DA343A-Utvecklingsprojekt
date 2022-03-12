@@ -1,14 +1,19 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ServerUpdate {
+public class ServerUpdate implements Serializable {
     private User newUserConnected;
     private ArrayList<User> connectedList;
 
-    public ServerUpdate(User newUserConnected, ArrayList<User> connectedList){
-        this.newUserConnected = newUserConnected;
-        this.connectedList = connectedList;
+    //public ServerUpdate(User newUserConnected, ArrayList<User> connectedList){
+      //  this.newUserConnected = newUserConnected;
+        //this.connectedList = connectedList;
+    //}
+
+    public ServerUpdate(){
+
     }
 
     public User getNewUserConnected() {

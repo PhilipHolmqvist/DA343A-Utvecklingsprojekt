@@ -8,67 +8,57 @@ import model.User;
 import java.io.*;
 import java.net.Socket;
 
-public class ClientConnection extends Thread{
-        private ServerController controller;
-        private Socket socket;
-        private ObjectInputStream ois;
-        private ObjectOutputStream oos;
-        private User user;
-        private Buffer<Message> messageBuffer;
-        private Boolean firstConnect = true;
+public class ClientConnection {
+    private Socket socket;
+    private Buffer<Message> msgToSend;
 
-        public ClientConnection(Socket socket, ServerController controller) throws IOException {
-            this.socket = socket;
-            ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-            oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-            this.messageBuffer = new Buffer<Message>();
-            start();
-        }
-
-        public void addMessageToBuffer(Message msg){
-            messageBuffer.put(msg);
-        }
-
-        public User getUser() {
-            return user;
-        }
-
-        public void run() {
-
-            try{
-                while(true){
-
-                if(firstConnect) {
-                    Object obj = ois.readObject();
-                    if (obj instanceof User) { //Ny användare har anslutit sig till servern
-                        //Logga att en ny användare är online.
-                        //Skicka uppdatering till Klienter att en ny användare är online.
-                        this.user = (User) obj;
-                    }
-                }
-
-                Message msg = (Message) ois.readObject();
-                controller.newMessage(msg);
-
-                }
-            }catch (Exception e) {
-                System.err.println(e);
-            }
-        }
-
-    public void updateClient(ServerUpdate update) {
-            try{
-                oos.writeObject(update);
-            }catch (Exception e){
-                System.out.println(e);
-            }
+    public ClientConnection(Socket socket){
+        this.socket = socket;
+        msgToSend = new Buffer<Message>();
+        System.out.println("Startar strömmarna");
+        new ClientInput().start();
+        new ClientOutput().start();
     }
 
     public void newMsgForClient(Message msg){
-            try {
-                oos.writeObject(msg);
-            }catch (Exception e){
-                System.out.println(e);
-            }
+        msgToSend.put(msg);
     }
+
+
+
+    private class ClientInput extends Thread{
+        private ObjectInputStream ois;
+
+        public void run(){
+            try{
+                ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+                User user = (User) ois.readObject();
+                System.out.println(user.getUsername());
+
+
+            }catch (Exception e){
+                System.err.println(e);
+            }
+        }
+    }
+
+    private class ClientOutput extends Thread{
+        private ObjectOutputStream oos;
+
+        public void run(){
+            try{
+                oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+                oos.writeObject(new ServerUpdate());
+
+                while(true){
+                    oos.writeObject(msgToSend.get());
+                }
+
+
+            }catch (Exception e){
+                System.err.println(e);
+            }
+        }
+    }
+
 }

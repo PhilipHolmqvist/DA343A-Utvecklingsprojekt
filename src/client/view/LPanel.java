@@ -67,7 +67,7 @@ public class LPanel extends JPanel {
         public void actionPerformed(ActionEvent e)
         {
             if (e.getSource() == sendButton) {
-                controller.sendButtonPressed();
+                //controller.sendButtonPressed();
             }
         }
     }

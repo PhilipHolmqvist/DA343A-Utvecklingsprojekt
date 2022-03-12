@@ -1,8 +1,9 @@
 package model;
 
 import javax.swing.*;
+import java.io.Serializable;
 
-public class User {
+public class User implements Serializable {
     private String username;
     private Icon icon;
 
