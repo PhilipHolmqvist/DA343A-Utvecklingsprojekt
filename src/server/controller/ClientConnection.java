@@ -11,9 +11,12 @@ import java.net.Socket;
 public class ClientConnection {
     private Socket socket;
     private Buffer<Message> msgToSend;
+    private User user;
+    private ServerController controller;
 
-    public ClientConnection(Socket socket){
+    public ClientConnection(Socket socket, ServerController controller){
         this.socket = socket;
+        this.controller = controller;
         msgToSend = new Buffer<Message>();
         System.out.println("Startar strömmarna");
         new ClientInput().start();
@@ -24,6 +27,10 @@ public class ClientConnection {
         msgToSend.put(msg);
     }
 
+    public User getUser(){
+        return user;
+    }
+
 
 
     private class ClientInput extends Thread{
@@ -32,8 +39,15 @@ public class ClientConnection {
         public void run(){
             try{
                 ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
-                User user = (User) ois.readObject();
-                System.out.println(user.getUsername());
+                //Första objektet som servern får ifrån Client är alltid ett user objekt.
+                user = (User) ois.readObject();
+                System.out.println(user.getUsername() + " anslöt sig.");
+
+                //Sedan kan klient bara skicka Message objekt.
+                while(true){
+                    Message msg = (Message) ois.readObject();
+                    controller.sendMessage(msg);
+                }
 
 
             }catch (Exception e){

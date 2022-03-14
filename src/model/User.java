@@ -12,7 +12,8 @@ public class User implements Serializable {
     }
 
     public User(String username, Icon icon){
-
+        this.username = username;
+        this.icon = icon;
     }
 
     public String getUsername() {

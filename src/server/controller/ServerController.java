@@ -23,6 +23,17 @@ public class ServerController {
         new Connection(721, this).start();
     }
 
+    public void sendMessage(Message msg){
+        User[] recipients = msg.getRecipients();
+
+        for(int i = 0; i < activeClients.size(); i++){
+            for(int j = 0; j < recipients.length; j++){
+                if(activeClients.get(i).getUser() == recipients[j]){
+                    activeClients.get(i).newMsgForClient(msg);
+                }
+            }
+        }
+    }
 
     private class Connection extends Thread {
         private int port;
@@ -42,9 +53,8 @@ public class ServerController {
                     try {
                         socket = serverSocket.accept(); //När en klient kommer skapas en ny socket
                         System.out.println("ny klient accepterad");
-                        new ClientConnection(socket); //en ny instans av clientHandler instanseras med socket som parameter.
-
-                        //activeClients.add(client);
+                        client = new ClientConnection(socket, controller); //en ny instans av clientHandler instanseras med socket som parameter.
+                        activeClients.add(client);
                         //System.out.println("ny klient tillagd som aktiv");
                         //ServerUpdate update = newUserConnected(client.getUser());
                        // for(int i = 0; i < activeClients.size(); i++){
