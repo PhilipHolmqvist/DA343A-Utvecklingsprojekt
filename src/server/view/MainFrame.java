@@ -18,4 +18,8 @@ public class MainFrame extends JFrame {
         this.controller = controller;   //Skapar basfönster
 
     }
+
+    public void displayLogInView(String[] logs) {
+        mainPanel.displayLogInView(logs);
+    }
 }

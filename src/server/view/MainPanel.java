@@ -24,4 +24,8 @@ public class MainPanel extends JPanel {
         add(rightPanel);
 
     }
+
+    public void displayLogInView(String[] logs) {
+        rightPanel.displayLogInView(logs);
+    }
 }

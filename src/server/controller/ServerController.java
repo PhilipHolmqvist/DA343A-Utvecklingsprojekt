@@ -35,6 +35,23 @@ public class ServerController {
         }
     }
 
+    //Anropas när ok knappen blir tryckt. Parametern är datum och tid
+    //i formatet yyyymmdd-tttt. Loggen ska hämtas från datum och tid till datum och tid.
+    //skicka sedan en string array med alla loggar mellan dessa två tidpunkter.
+    public void displayLog(String fromDate, String toDate) {
+        String[] logs = new String []{
+                        "20220316 13:40 Server online",
+                        "20220316 13:41 Emma är online",
+                        "20220316 13:41 Philip är online",
+                        "20220316 13:42 från Emma till Philip: 'Hej!' ",
+                        "20220316 13:42 från Philip till Emma: 'Tjenare!' ",
+                        "20220316 13:43 Emma är offline",
+                        "20220316 13:43 Philip är offline",};
+
+
+        view.displayLogInView(logs);
+    }
+
     private class Connection extends Thread {
         private int port;
         private ServerController controller;
