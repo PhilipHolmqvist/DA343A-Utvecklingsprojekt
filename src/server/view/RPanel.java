@@ -7,6 +7,7 @@ import java.awt.*;
 
 public class RPanel extends JPanel {
     private ServerController controller;
+    private JTextArea logs;
 
     public RPanel(ServerController controller, int width, int hight){
         setSize(width, hight);

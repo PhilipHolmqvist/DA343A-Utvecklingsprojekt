@@ -21,7 +21,6 @@ public class LPanel extends JPanel {
         this.controller = controller;
         this.setSize(width, higth);
         this.setLayout(null);
-
         setUp();
 
     }
