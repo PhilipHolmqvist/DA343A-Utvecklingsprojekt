@@ -25,6 +25,7 @@ public class ClientController {
         if (loginWindow.authenticate()) {
             String username = loginWindow.getUsername();
             String imagePath = loginWindow.getImagePath();
+            Icon icon = new ImageIcon(loginWindow.getImagePath());
             login = new User(username, new ImageIcon(imagePath));
 
             view = new MainFrame(this);

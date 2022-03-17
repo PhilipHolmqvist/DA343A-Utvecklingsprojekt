@@ -83,12 +83,12 @@ public class LoginWindow extends JDialog {
         btnChooseIcon.addActionListener( e -> {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setMultiSelectionEnabled(false);
-            fileChooser.setCurrentDirectory(new java.io.File("./files/avatars"));
+            fileChooser.setCurrentDirectory(new java.io.File("./avatars"));
             FileNameExtensionFilter filter = new FileNameExtensionFilter("jpg & png", "png", "jpg");
             fileChooser.setFileFilter(filter);
 
             if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-                imagePath = fileChooser.getSelectedFile().getPath();
+                imagePath = fileChooser.getSelectedFile().getAbsolutePath();
             }
         });
 
