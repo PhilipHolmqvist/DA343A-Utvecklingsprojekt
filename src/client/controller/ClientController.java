@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
+import java.util.Objects;
 
 public class ClientController {
     private MainFrame view;
@@ -35,7 +36,8 @@ public class ClientController {
             new ServerConnection("127.0.0.1", 721, this);
 
             login.setUsername(loginWindow.getUsername());
-            //login.setIcon(få ikon här???);
+            login.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource(loginWindow.getImagePath()))));
+            //vet ej om detta funkar ^^^^?
         } else {
             System.exit(0);
         }
