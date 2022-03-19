@@ -17,7 +17,7 @@ public class LoginWindow extends JDialog {
     private JButton btnCancel;
     private JButton btnChooseIcon;
     private boolean authenticated;
-    private String imagePath = "files/avatars/blue.png";
+    private String imagePath = "avatars/blue.png";
 
     public boolean authenticate() {
         return authenticated;

@@ -3,6 +3,7 @@ package client.view;
 import client.controller.ClientController;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 
 public class RPanel extends JPanel {
@@ -12,6 +13,8 @@ public class RPanel extends JPanel {
     private JTextArea chatWindow;
     private JTextArea writeMessageWindow;
     private JButton sendMessage;
+    private JButton choosePic;
+    private String imagePath;
 
 
     public RPanel(ClientController controller, int width, int height){
@@ -30,6 +33,25 @@ public class RPanel extends JPanel {
         chatWindow.setEditable(false);
         add(chatWindow);
 
+        choosePic = new JButton("Välj bild");
+        choosePic.setSize(120, 40);
+        choosePic.setLocation(270, 545);
+
+        choosePic.addActionListener( e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setMultiSelectionEnabled(false);
+            fileChooser.setCurrentDirectory(new java.io.File("./images"));
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("jpg & png", "png", "jpg");
+            fileChooser.setFileFilter(filter);
+
+            if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                imagePath = fileChooser.getSelectedFile().getAbsolutePath();
+            }
+        });
+
+        add(choosePic);
+
+
         writeMessageWindow = new JTextArea();
         writeMessageWindow.setLocation(40, 450);
         writeMessageWindow.setSize(500, 90);
@@ -40,7 +62,8 @@ public class RPanel extends JPanel {
 
         sendMessage = new JButton("Skicka meddelande");
         sendMessage.setSize(150, 40);
-        sendMessage.setLocation(390,560);
+        sendMessage.setLocation(390,545);
         add(sendMessage);
+
     }
 }
