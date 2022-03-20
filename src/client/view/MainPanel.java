@@ -32,7 +32,7 @@ public class MainPanel extends JPanel {
         leftPanel.setLocation(0,0);
         add(leftPanel);
 
-        rightPanel = new RPanel(controller, 600, hight);
+        rightPanel = new RPanel(controller, 700, hight);
         rightPanel.setLocation(width/3, 0);
         add(rightPanel);
 

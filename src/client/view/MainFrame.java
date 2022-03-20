@@ -8,7 +8,7 @@ import javax.swing.*;
 public class MainFrame extends JFrame {
     private MainPanel mainPanel;
     private ClientController controller;
-    private final int width = 900;
+    private final int width = 1000;
     private final int hight = 660;
 
     public MainFrame(ClientController controller) {

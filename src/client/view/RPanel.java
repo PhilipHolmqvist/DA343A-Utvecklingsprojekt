@@ -1,15 +1,10 @@
 package client.view;
 
 import client.controller.ClientController;
-import model.User;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class RPanel extends JPanel {
     private ClientController controller;
@@ -20,7 +15,8 @@ public class RPanel extends JPanel {
     private JButton sendMessage;
     private JButton choosePic;
     private String imagePath;
-    private JLabel pic;
+    private JLabel userPic;
+    private JLabel chatPic;
 
     public RPanel(ClientController controller, int width, int height) {
         this.controller = controller;
@@ -31,7 +27,7 @@ public class RPanel extends JPanel {
 
     private void setUp() {
         chatWindow = new JTextArea();
-        chatWindow.setLocation(40, 40);
+        chatWindow.setLocation(120, 40);
         chatWindow.setSize(500, 400);
         chatWindow.setBorder(BorderFactory.createLoweredBevelBorder());
         chatWindow.setBackground(new Color(255, 255, 255));
@@ -39,8 +35,8 @@ public class RPanel extends JPanel {
         add(chatWindow);
 
         choosePic = new JButton("Välj bild");
-        choosePic.setSize(120, 40);
-        choosePic.setLocation(270, 545);
+        choosePic.setSize(220, 40);
+        choosePic.setLocation(250, 545);
 
         choosePic.addActionListener( e -> {
             JFileChooser fileChooser = new JFileChooser();
@@ -58,7 +54,7 @@ public class RPanel extends JPanel {
 
 
         writeMessageWindow = new JTextArea();
-        writeMessageWindow.setLocation(40, 450);
+        writeMessageWindow.setLocation(120, 450);
         writeMessageWindow.setSize(500, 90);
         writeMessageWindow.setBorder(BorderFactory.createLoweredBevelBorder());
         writeMessageWindow.setBackground(new Color(255, 255, 255));
@@ -67,15 +63,43 @@ public class RPanel extends JPanel {
 
         sendMessage = new JButton("Skicka meddelande");
         sendMessage.setSize(150, 40);
-        sendMessage.setLocation(390,545);
+        sendMessage.setLocation(470,545);
         add(sendMessage);
 
-//        funkar inte men vill lägga till en liten förhandsvisning av bilen man väljer
-//        pic = new JLabel();
-//        pic.setSize(20,20);
-//        pic.setLocation(200, 545);
-//        pic.setIcon(new ImageIcon("images/angry.png"));
-//        add(pic);
-//        validate();
+        ImageIcon imageIcon = new ImageIcon("images/angry.png"); // load the image to a imageIcon
+        Image image = imageIcon.getImage(); // transform it
+        Image newimg = image.getScaledInstance(60, 60,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+        imageIcon = new ImageIcon(newimg);  // transform it back
+
+        userPic = new JLabel(imageIcon);
+        userPic.setSize(40,40);
+        userPic.setLocation(40, 470);
+        add(userPic);
+
+        ImageIcon imageIcon2 = new ImageIcon("images/angry.png"); // load the image to a imageIcon
+        Image image2 = imageIcon2.getImage(); // transform it
+        Image newimg2 = image2.getScaledInstance(60, 60,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+        imageIcon2 = new ImageIcon(newimg2);  // transform it back
+
+        userPic = new JLabel(imageIcon2);
+        userPic.setSize(40,40);
+        userPic.setLocation(40, 100);
+        add(userPic);
+    }
+
+    public void setUserPic(ImageIcon icon){
+        Image image = icon.getImage(); // transform it
+        Image newimg = image.getScaledInstance(60, 60,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+        icon = new ImageIcon(newimg);  // transform it back
+        userPic.setIcon(icon);
+        repaint();
+    }
+
+    public void setChatPic(ImageIcon icon){
+        Image image = icon.getImage(); // transform it
+        Image newimg = image.getScaledInstance(60, 60,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+        icon = new ImageIcon(newimg);  // transform it back
+        chatPic.setIcon(icon);
+        repaint();
     }
 }
