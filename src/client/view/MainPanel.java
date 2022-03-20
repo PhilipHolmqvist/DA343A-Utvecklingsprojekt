@@ -2,6 +2,7 @@ package client.view;
 
 import client.controller.ClientController;
 import model.Message;
+import model.ServerUpdate;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +39,7 @@ public class MainPanel extends JPanel {
 
     }
 
-    public void serverUpdate() {
+    public void serverUpdate(ServerUpdate update) {
         //Ska uppdatera listan på anslutna användare.
     }
 

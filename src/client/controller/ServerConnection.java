@@ -77,7 +77,8 @@ public class ServerConnection{
                     if(obj instanceof ServerUpdate){
                         //Ny serverupdate. Packa upp den och visa i view.
                         System.out.println("Clienten fick en serveruppdatering!");
-                        view.serverUpdate();
+                        ServerUpdate update = (ServerUpdate) obj;
+                        view.serverUpdate(update);
 
                     }
                     if(obj instanceof Message){
