@@ -1,6 +1,7 @@
 package client.view;
 
 import client.controller.ClientController;
+import model.Message;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,5 +36,13 @@ public class MainPanel extends JPanel {
         add(rightPanel);
 
 
+    }
+
+    public void serverUpdate() {
+        //Ska uppdatera listan på anslutna användare.
+    }
+
+    public void displayMessage(Message msg) {
+        //Det har kommit ett nytt meddelande. Lägg till detta i RPanel så att man kan se det!
     }
 }

@@ -1,5 +1,6 @@
 package client.controller;
 
+import client.view.MainPanel;
 import model.Buffer;
 import model.Message;
 import model.ServerUpdate;
@@ -13,24 +14,23 @@ public class ServerConnection{
     private Socket socket;
     private Buffer<Message> messagesToServer;
     private User user;
+    private MainPanel view;
 
     //Klassen ServerConnection är klientens anslutning till servern. Den använder
     //två separata trådar, en för input och en för output. Detta för att hela tiden kunna
     //skicka meddelanden och samtidigt ta emot server uppdateringar samt meddelanden.
-    public ServerConnection(String ip, int port, ClientController controller) throws IOException {
+    public ServerConnection(String ip, int port, ClientController controller, User user) throws IOException {
         this.controller = controller;
         messagesToServer = new Buffer<Message>();
+        this.user = user;
         socket = new Socket(ip, port);
-        sendMessage();
-        user = new User("Philip", null);
         new ClientOutput().start();
         new ClientInput().start();
     }
 
 
 
-    public void sendMessage(){
-        Message msg = new Message("Hejsan svejsan detta är ett msg", null);
+    public void sendMessage(Message msg){
         messagesToServer.put(msg);
     }
 
@@ -77,10 +77,14 @@ public class ServerConnection{
                     if(obj instanceof ServerUpdate){
                         //Ny serverupdate. Packa upp den och visa i view.
                         System.out.println("Clienten fick en serveruppdatering!");
+                        view.serverUpdate();
+
                     }
                     if(obj instanceof Message){
                         //Nytt meddelande. Displaya det i view.
                         System.out.println("Clienten fick ett nytt Message!");
+                        Message msg = (Message) obj;
+                        view.displayMessage(msg);
                     }
                 }
 

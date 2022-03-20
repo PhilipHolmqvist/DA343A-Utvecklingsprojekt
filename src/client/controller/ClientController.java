@@ -31,9 +31,10 @@ public class ClientController {
 
             view = new MainFrame(this);
 
+
             String server = loginWindow.getServerName();
             int port = loginWindow.getPort();
-            new ServerConnection("127.0.0.1", 721, this);
+            new ServerConnection("127.0.0.1", 721, this, login);
 
             login.setUsername(loginWindow.getUsername());
             login.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource(loginWindow.getImagePath()))));
