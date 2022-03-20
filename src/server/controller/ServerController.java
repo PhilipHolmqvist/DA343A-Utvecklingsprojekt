@@ -72,14 +72,14 @@ public class ServerController {
                         socket = serverSocket.accept(); //När en klient kommer skapas en ny socket
                         System.out.println("ny klient accepterad");
                         client = new ClientConnection(socket, controller); //en ny instans av clientHandler instanseras med socket som parameter.
-                        clientConnected(client);
+                        activeClients.add(client);
 
                     } catch(IOException e) {
                         System.err.println(e);
                     }
                 }
             } catch(IOException e) {
-                System.err.println(e);
+                e.printStackTrace();
             }
             System.out.println("Server stoppad");
         }
@@ -104,6 +104,7 @@ public class ServerController {
                 ServerUpdate newUpdate = controller.getUpdate();
                 if(newUpdate != update){
                     this.update = newUpdate;
+                    System.out.println("Update");
                     controller.sendServerUpdateToClients(update);
                 }
             }
@@ -124,12 +125,12 @@ public class ServerController {
         ServerUpdate serverUpdate = new ServerUpdate();
 
         ArrayList<User> connectedList = new ArrayList<>();
-        for(int i = 1; i < activeClients.size(); i++){
+        for(int i = 0; i < activeClients.size(); i++){
             connectedList.add(activeClients.get(i).getUser());
         }
 
         serverUpdate.setConnectedList(connectedList);
-        serverUpdate.setNewUserConnected(null);
+        serverUpdate.setNewUserConnected(latestClientConnected.getUser());
 
         this.serverUpdate = serverUpdate;
     }
@@ -144,7 +145,6 @@ public class ServerController {
     }
 
     public void clientConnected(ClientConnection client){
-        activeClients.add(client);
         this.latestClientConnected = client;
         createServerUpdate();
     }

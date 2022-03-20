@@ -19,8 +19,9 @@ public class ServerConnection{
     //Klassen ServerConnection är klientens anslutning till servern. Den använder
     //två separata trådar, en för input och en för output. Detta för att hela tiden kunna
     //skicka meddelanden och samtidigt ta emot server uppdateringar samt meddelanden.
-    public ServerConnection(String ip, int port, ClientController controller, User user) throws IOException {
+    public ServerConnection(String ip, int port, ClientController controller, User user, MainPanel view) throws IOException {
         this.controller = controller;
+        this.view = view;
         messagesToServer = new Buffer<Message>();
         this.user = user;
         socket = new Socket(ip, port);
@@ -78,14 +79,15 @@ public class ServerConnection{
                 ois = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
                 while(true){
                     Object obj = ois.readObject();
+                    System.out.println("tog emot");
 
                     if(obj instanceof ServerUpdate){
                         //Ny serverupdate. Packa upp den och visa i view.
                         System.out.println("Clienten fick en serveruppdatering!");
                         ServerUpdate update = (ServerUpdate) obj;
                         view.serverUpdate(update);
-
                     }
+
                     if(obj instanceof Message){
                         //Nytt meddelande. Displaya det i view.
                         System.out.println("Clienten fick ett nytt Message!");
@@ -95,7 +97,7 @@ public class ServerConnection{
                 }
 
             }catch (Exception e){
-                System.err.println(e);
+                e.printStackTrace();
             }
 
 

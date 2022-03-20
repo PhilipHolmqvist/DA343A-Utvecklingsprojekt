@@ -15,11 +15,11 @@ public class MainFrame extends JFrame {
     private final int width = 1000;
     private final int hight = 660;
 
-    public MainFrame(ClientController controller, ServerConnection serverConnection) {
+    public MainFrame(ClientController controller) {
         super("Chat Client");
         this.setResizable(false);
         this.setSize(width, hight);
-        this.mainPanel = new MainPanel(controller, serverConnection, width, hight);
+        this.mainPanel = new MainPanel(controller, width, hight);
         this.setContentPane(mainPanel);
         this.setVisible(true);
         this.controller = controller;   //Skapar basfönster
@@ -32,6 +32,10 @@ public class MainFrame extends JFrame {
             }
         });
 
+    }
+
+    public MainPanel getMainPanel(){
+        return mainPanel;
     }
 
 

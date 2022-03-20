@@ -21,7 +21,7 @@ public class LPanel extends JPanel {
     private JList<String> contacts;
     private JLabel text;
 
-    public LPanel(ClientController controller, ServerConnection serverConnection, int width, int higth){
+    public LPanel(ClientController controller, int width, int higth){
         this.controller = controller;
         this.setSize(width, higth);
         this.setLayout(null);
@@ -72,11 +72,20 @@ public class LPanel extends JPanel {
     }
 
     public void serverUpdate(ServerUpdate update) {
+
+
+        System.out.println(update.getConnectedList());
+        System.out.println(update.getNewUserConnected());
+
         ArrayList<User> users = update.getConnectedList();
         String[] userlist = new String[users.size()];
         for(int i = 0; i < users.size(); i++){
             userlist[i] = users.get(i).getUsername();
         }
+
         connectedUsers.setListData(userlist);
+
+
+
     }
 }

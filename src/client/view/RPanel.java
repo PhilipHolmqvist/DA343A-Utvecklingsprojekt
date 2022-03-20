@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 
 public class RPanel extends JPanel {
     private ClientController controller;
-    private ServerConnection serverConnection;
     private LPanel leftpanel;
     private int width;
     private int height;
@@ -27,9 +26,8 @@ public class RPanel extends JPanel {
     private JLabel username;
     private JLabel chatbuddyname;
 
-    public RPanel(ClientController controller, ServerConnection serverConnection, LPanel leftpanel, int width, int height) {
+    public RPanel(ClientController controller, LPanel leftpanel, int width, int height) {
         this.controller = controller;
-        this.serverConnection = serverConnection;
         this.leftpanel = leftpanel;
         this.setSize(width, height);
         this.setLayout(null);
@@ -141,15 +139,19 @@ public class RPanel extends JPanel {
         sendMessage.addActionListener(listener);
     }
 
+    public void newMessage(String msg) {
+        chatWindow.append(msg);
+    }
+
     class ButtonActionListeners implements ActionListener {
         public void actionPerformed(ActionEvent e)
         {
             if (e.getSource() == sendMessage) {
                                                                     //Lägg till om man ska skicka en bild här, byta ut null.
                 Message msg = new Message(writeMessageWindow.getText(), null);
-                msg.setSender(serverConnection.getUser());
+                msg.setSender(controller.getUser());
                 msg.setRecipients(leftpanel.getSelectedRecipients());
-                serverConnection.sendMessage(msg);
+                controller.sendMessage(msg);
             }
         }
     }

@@ -50,6 +50,7 @@ public class ClientConnection {
                 //Första objektet som servern får ifrån Client är alltid ett user objekt.
                 user = (User) ois.readObject();
                 System.out.println(user.getUsername() + " anslöt sig.");
+                controller.clientConnected(connection);
 
                 //Sedan kan klient bara skicka Message objekt.
                 while(true){
@@ -62,7 +63,7 @@ public class ClientConnection {
 
 
             }catch (Exception e){
-                System.err.println(e);
+                e.printStackTrace();
             }
         }
     }
@@ -74,14 +75,18 @@ public class ClientConnection {
             try{
                 oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
                 oos.writeObject(objectsToSend.get());
+                oos.flush();
 
                 while(true){
                     oos.writeObject(objectsToSend.get());
+                    oos.flush();
+                    System.out.println("Skickat något till klient");
                 }
 
 
+
             }catch (Exception e){
-                System.err.println(e);
+                e.printStackTrace();
             }
         }
     }

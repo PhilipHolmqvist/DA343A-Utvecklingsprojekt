@@ -12,18 +12,16 @@ import java.awt.*;
 public class MainPanel extends JPanel {
     private ClientController controller;
     private Message msg;
-    private ServerConnection serverConnection;
     private int width;
     private int hight;
 
     private LPanel leftPanel; //Kontakter, användare online etc.
     private RPanel rightPanel; //Chatt och möjlighet att skriva.
 
-    public MainPanel(ClientController controller, ServerConnection serverConnection, int width, int hight) {
+    public MainPanel(ClientController controller, int width, int hight) {
         this.width = width;
         this.hight = hight;
         this.controller = controller;
-        this.serverConnection = serverConnection;
 
         this.setSize(width, hight);
         this.setLayout(null);
@@ -33,11 +31,11 @@ public class MainPanel extends JPanel {
     }
 
     public void setUp(){
-        leftPanel = new LPanel(controller, serverConnection, width / 3, hight);
+        leftPanel = new LPanel(controller, width / 3, hight);
         leftPanel.setLocation(0,0);
         add(leftPanel);
 
-        rightPanel = new RPanel(controller, serverConnection, leftPanel,  700, hight);
+        rightPanel = new RPanel(controller, leftPanel,  700, hight);
         rightPanel.setLocation(width/3, 0);
         add(rightPanel);
 
@@ -49,7 +47,8 @@ public class MainPanel extends JPanel {
     }
 
     public void displayMessage(Message msg) {
-        String.format("%s skriver: %s %s", msg.getSender(), msg.getText(), msg.getIcon());
+        String text = String.format("%s skriver: %s", msg.getSender(), msg.getText());
+        rightPanel.newMessage(text);
     }
 
     public void setUser(User login) {

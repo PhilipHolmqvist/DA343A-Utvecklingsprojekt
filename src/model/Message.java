@@ -30,8 +30,8 @@ public class Message implements Serializable {
         this.icon = icon;
     }
 
-    public User getSender() {
-        return sender;
+    public String getSender() {
+        return sender.getUsername();
     }
 
     public void setSender(User sender) {
