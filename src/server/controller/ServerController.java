@@ -18,9 +18,11 @@ public class ServerController {
     private ArrayList<ClientConnection> activeClients;
     private ClientConnection latestClientConnected;
     private ServerUpdate serverUpdate = null;
+    private Logger logger;
 
     public ServerController(){
         this.view = new MainFrame(this, 900, 600);
+        this.logger = new Logger();
         activeClients = new ArrayList<ClientConnection>();
         new Connection(721, this).start();
         new UpdateHandeler(this).start();
@@ -66,6 +68,7 @@ public class ServerController {
         public void run() {
             Socket socket = null;
             System.out.println("Server, tråd #1 startad");
+            logger.log("hej");
             try (ServerSocket serverSocket = new ServerSocket(port)) { //Skapar en serverSocket med porten
                 while(true) {
                     try {
