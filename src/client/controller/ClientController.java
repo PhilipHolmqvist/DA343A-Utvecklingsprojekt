@@ -18,6 +18,7 @@ public class ClientController {
     private MainFrame view;
     private LoginWindow loginWindow;
     private User login;
+    private ServerConnection serverConnection;
 
     public ClientController() throws IOException {
         LoginWindow loginWindow = new LoginWindow(new Frame("Logga in"));
@@ -34,7 +35,7 @@ public class ClientController {
 
             String server = loginWindow.getServerName();
             int port = loginWindow.getPort();
-            new ServerConnection("127.0.0.1", 721, this, login);
+            serverConnection = new ServerConnection("127.0.0.1", 721, this, login);
 
             login.setUsername(loginWindow.getUsername());
             login.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource(loginWindow.getImagePath()))));
@@ -48,5 +49,9 @@ public class ClientController {
 
     public static void main(String[] args) throws IOException {
         new ClientController();
+    }
+
+    public void clientDisconnecting() {
+        serverConnection.clientDisconnecting();
     }
 }

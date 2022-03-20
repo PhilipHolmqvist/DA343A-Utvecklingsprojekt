@@ -34,6 +34,9 @@ public class ServerConnection{
         messagesToServer.put(msg);
     }
 
+    public void clientDisconnecting() {
+        Message msg = new Message("//disconnet", null);
+    }
 
 
     //Skickar meddelande till servern

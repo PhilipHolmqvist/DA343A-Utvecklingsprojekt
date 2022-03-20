@@ -16,11 +16,14 @@ public class ServerController {
     private MainFrame view;
     private int port = 721;
     private ArrayList<ClientConnection> activeClients;
+    private ClientConnection latestClientConnected;
+    private ServerUpdate serverUpdate = null;
 
     public ServerController(){
         this.view = new MainFrame(this, 900, 600);
         activeClients = new ArrayList<ClientConnection>();
         new Connection(721, this).start();
+        new UpdateHandeler(this);
     }
 
     public void sendMessage(Message msg){
@@ -64,20 +67,14 @@ public class ServerController {
 
         public void run() {
             Socket socket = null;
-            System.out.println("Server startad");
+            System.out.println("Server, tråd #1 startad");
             try (ServerSocket serverSocket = new ServerSocket(port)) { //Skapar en serverSocket med porten
                 while(true) {
                     try {
                         socket = serverSocket.accept(); //När en klient kommer skapas en ny socket
                         System.out.println("ny klient accepterad");
                         client = new ClientConnection(socket, controller); //en ny instans av clientHandler instanseras med socket som parameter.
-                        activeClients.add(client);
-                        //System.out.println("ny klient tillagd som aktiv");
-                        //ServerUpdate update = newUserConnected(client.getUser());
-                       // for(int i = 0; i < activeClients.size(); i++){
-                         //   activeClients.get(i).updateClient(update);
-                        //}
-                        //System.out.println("Uppdatering skickad");
+
 
                     } catch(IOException e) {
                         System.err.println(e);
@@ -90,9 +87,69 @@ public class ServerController {
         }
     }
 
+    private class UpdateHandeler extends Thread {
+        private ServerController controller;
+        private ServerUpdate update;
+
+        public UpdateHandeler(ServerController controller) {
+            this.controller = controller;
+        }
+
+        public void run() {
+            System.out.println("Server, tråd #2 startad");
+            while (true) {
+                ServerUpdate newUpdate = controller.getUpdate();
+                if(newUpdate != update){
+                    this.update = newUpdate;
+                    controller.sendServerUpdateToClients(update);
+                }
+            }
+        }
+    }
+
+    private void sendServerUpdateToClients(ServerUpdate update) {
+        for(int i = 0; i < activeClients.size(); i++){
+            activeClients.get(i).newServerUpdate(update);
+        }
+    }
+
+    private ServerUpdate getUpdate() {
+        return serverUpdate;
+    }
+
+    private void createServerUpdate(){
+        ServerUpdate serverUpdate = new ServerUpdate();
+
+        ArrayList<User> connectedList = new ArrayList<>();
+        for(int i = 1; i < activeClients.size(); i++){
+            connectedList.add(activeClients.get(i).getUser());
+        }
+
+        serverUpdate.setConnectedList(connectedList);
+        serverUpdate.setNewUserConnected(null);
+
+        this.serverUpdate = serverUpdate;
+    }
+
+    public void clientDisconnected(ClientConnection client){
+        for(int i = 0; i < activeClients.size(); i++){
+            if(activeClients.get(i) == client){
+                activeClients.remove(i);
+            }
+        }
+        createServerUpdate();
+    }
+
+    public void clientConnected(ClientConnection client){
+        activeClients.add(client);
+        createServerUpdate();
+    }
+
     public static void main(String[] args) {
 
         new ServerController();
         //Startar servern
     }
+
+
 }

@@ -10,31 +10,39 @@ import java.net.Socket;
 
 public class ClientConnection {
     private Socket socket;
-    private Buffer<Message> msgToSend;
+    private Buffer<Object> objectsToSend;
     private User user;
     private ServerController controller;
 
     public ClientConnection(Socket socket, ServerController controller){
         this.socket = socket;
         this.controller = controller;
-        msgToSend = new Buffer<Message>();
+        objectsToSend = new Buffer<Object>();
         System.out.println("Startar strömmarna");
-        new ClientInput().start();
+        new ClientInput(this).start();
         new ClientOutput().start();
     }
 
     public void newMsgForClient(Message msg){
-        msgToSend.put(msg);
+        objectsToSend.put(msg);
     }
 
     public User getUser(){
         return user;
     }
 
+    public void newServerUpdate(ServerUpdate update) {
+        objectsToSend.put(update);
+    }
 
 
     private class ClientInput extends Thread{
         private ObjectInputStream ois;
+        private ClientConnection connection;
+
+        public ClientInput(ClientConnection connection){
+            this.connection = connection;
+        }
 
         public void run(){
             try{
@@ -46,6 +54,9 @@ public class ClientConnection {
                 //Sedan kan klient bara skicka Message objekt.
                 while(true){
                     Message msg = (Message) ois.readObject();
+                    if(msg.getText().equals("//disconnet")){
+                        controller.clientConnected(connection);
+                    }
                     controller.sendMessage(msg);
                 }
 
@@ -62,10 +73,10 @@ public class ClientConnection {
         public void run(){
             try{
                 oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-                oos.writeObject(new ServerUpdate());
+                oos.writeObject(objectsToSend.get());
 
                 while(true){
-                    oos.writeObject(msgToSend.get());
+                    oos.writeObject(objectsToSend.get());
                 }
 
 
