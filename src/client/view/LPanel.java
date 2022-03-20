@@ -50,7 +50,7 @@ public class LPanel extends JPanel {
         contacts.setSize(260, 230);
         add(contacts);
 
-        sendButton = new JButton("Send");
+        sendButton = new JButton("Skicka");
         sendButton.setSize(70, 40);
         sendButton.setLocation(20,560);
         add(sendButton);

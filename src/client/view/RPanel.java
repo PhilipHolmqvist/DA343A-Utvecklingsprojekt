@@ -1,10 +1,15 @@
 package client.view;
 
 import client.controller.ClientController;
+import model.User;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class RPanel extends JPanel {
     private ClientController controller;
@@ -15,9 +20,9 @@ public class RPanel extends JPanel {
     private JButton sendMessage;
     private JButton choosePic;
     private String imagePath;
+    private JLabel pic;
 
-
-    public RPanel(ClientController controller, int width, int height){
+    public RPanel(ClientController controller, int width, int height) {
         this.controller = controller;
         this.setSize(width, height);
         this.setLayout(null);
@@ -65,5 +70,12 @@ public class RPanel extends JPanel {
         sendMessage.setLocation(390,545);
         add(sendMessage);
 
+//        funkar inte men vill lägga till en liten förhandsvisning av bilen man väljer
+//        pic = new JLabel();
+//        pic.setSize(20,20);
+//        pic.setLocation(200, 545);
+//        pic.setIcon(new ImageIcon("images/angry.png"));
+//        add(pic);
+//        validate();
     }
 }

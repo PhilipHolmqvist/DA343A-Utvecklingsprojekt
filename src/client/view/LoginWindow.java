@@ -24,7 +24,7 @@ public class LoginWindow extends JDialog {
     }
 
     public LoginWindow(Frame parent) {
-        super(parent, "Login", true);
+        super(parent, "Logga in", true);
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints cs = new GridBagConstraints();
         cs.fill = GridBagConstraints.HORIZONTAL;

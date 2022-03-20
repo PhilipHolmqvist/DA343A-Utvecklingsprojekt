@@ -20,7 +20,7 @@ public class ClientController {
     private User login;
 
     public ClientController() throws IOException {
-        LoginWindow loginWindow = new LoginWindow(new Frame("Jdialog demo"));
+        LoginWindow loginWindow = new LoginWindow(new Frame("Logga in"));
         loginWindow.setVisible(true);
 
         if (loginWindow.authenticate()) {
