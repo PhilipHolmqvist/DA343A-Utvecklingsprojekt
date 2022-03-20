@@ -23,17 +23,15 @@ public class ServerController {
         this.view = new MainFrame(this, 900, 600);
         activeClients = new ArrayList<ClientConnection>();
         new Connection(721, this).start();
-        new UpdateHandeler(this);
+        new UpdateHandeler(this).start();
     }
 
     public void sendMessage(Message msg){
-        User[] recipients = msg.getRecipients();
+        String[] recipients = msg.getRecipients();
 
         for(int i = 0; i < activeClients.size(); i++){
-            for(int j = 0; j < recipients.length; j++){
-                if(activeClients.get(i).getUser() == recipients[j]){
-                    activeClients.get(i).newMsgForClient(msg);
-                }
+            if(activeClients.get(i).getUser().getUsername().equals(recipients[i])){
+                activeClients.get(i).newMsgForClient(msg);
             }
         }
     }
@@ -74,7 +72,7 @@ public class ServerController {
                         socket = serverSocket.accept(); //När en klient kommer skapas en ny socket
                         System.out.println("ny klient accepterad");
                         client = new ClientConnection(socket, controller); //en ny instans av clientHandler instanseras med socket som parameter.
-
+                        clientConnected(client);
 
                     } catch(IOException e) {
                         System.err.println(e);
@@ -98,6 +96,11 @@ public class ServerController {
         public void run() {
             System.out.println("Server, tråd #2 startad");
             while (true) {
+                try {
+                    sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 ServerUpdate newUpdate = controller.getUpdate();
                 if(newUpdate != update){
                     this.update = newUpdate;
@@ -142,6 +145,7 @@ public class ServerController {
 
     public void clientConnected(ClientConnection client){
         activeClients.add(client);
+        this.latestClientConnected = client;
         createServerUpdate();
     }
 

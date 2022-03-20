@@ -7,7 +7,7 @@ public class Message implements Serializable {
     private String text;
     private Icon icon;
     private User sender;
-    private User[] recipients;
+    private String[] recipients;
 
     public Message(String text, Icon icon){
         this.text = text;
@@ -38,11 +38,11 @@ public class Message implements Serializable {
         this.sender = sender;
     }
 
-    public User[] getRecipients() {
+    public String[] getRecipients() {
         return recipients;
     }
 
-    public void setRecipients(User[] recipients) {
+    public void setRecipients(String[] recipients) {
         this.recipients = recipients;
     }
 }

@@ -1,13 +1,20 @@
 package client.view;
 
 import client.controller.ClientController;
+import client.controller.ServerConnection;
+import model.Message;
+import model.User;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class RPanel extends JPanel {
     private ClientController controller;
+    private ServerConnection serverConnection;
+    private LPanel leftpanel;
     private int width;
     private int height;
     private JTextArea chatWindow;
@@ -17,9 +24,13 @@ public class RPanel extends JPanel {
     private String imagePath;
     private JLabel userPic;
     private JLabel chatPic;
+    private JLabel username;
+    private JLabel chatbuddyname;
 
-    public RPanel(ClientController controller, int width, int height) {
+    public RPanel(ClientController controller, ServerConnection serverConnection, LPanel leftpanel, int width, int height) {
         this.controller = controller;
+        this.serverConnection = serverConnection;
+        this.leftpanel = leftpanel;
         this.setSize(width, height);
         this.setLayout(null);
         setUp();
@@ -73,7 +84,7 @@ public class RPanel extends JPanel {
 
         userPic = new JLabel(imageIcon);
         userPic.setSize(40,40);
-        userPic.setLocation(40, 470);
+        userPic.setLocation(40, 100);
         add(userPic);
 
         ImageIcon imageIcon2 = new ImageIcon("images/angry.png"); // load the image to a imageIcon
@@ -82,9 +93,21 @@ public class RPanel extends JPanel {
         imageIcon2 = new ImageIcon(newimg2);  // transform it back
 
         userPic = new JLabel(imageIcon2);
-        userPic.setSize(40,40);
-        userPic.setLocation(40, 100);
+        userPic.setSize(60,60);
+        userPic.setLocation(40, 480);
         add(userPic);
+
+        username = new JLabel("");
+        username.setSize(90, 30);
+        username.setLocation(40, 450);
+        add(username);
+
+        chatbuddyname = new JLabel();
+        chatbuddyname.setSize(90, 30);
+        chatbuddyname.setLocation(40, 70);
+        add(chatbuddyname);
+
+        addListeners();
     }
 
     public void setUserPic(ImageIcon icon){
@@ -101,5 +124,33 @@ public class RPanel extends JPanel {
         icon = new ImageIcon(newimg);  // transform it back
         chatPic.setIcon(icon);
         repaint();
+    }
+
+    public void setUser(User login) {
+        setUserPic((ImageIcon) login.getIcon());
+        username.setText(login.getUsername());
+    }
+
+    public void setChatBuddy(User user){
+        setChatPic((ImageIcon) user.getIcon());
+        chatbuddyname.setText(user.getUsername());
+    }
+
+    private void addListeners() {
+        ActionListener listener = new ButtonActionListeners();
+        sendMessage.addActionListener(listener);
+    }
+
+    class ButtonActionListeners implements ActionListener {
+        public void actionPerformed(ActionEvent e)
+        {
+            if (e.getSource() == sendMessage) {
+                                                                    //Lägg till om man ska skicka en bild här, byta ut null.
+                Message msg = new Message(writeMessageWindow.getText(), null);
+                msg.setSender(serverConnection.getUser());
+                msg.setRecipients(leftpanel.getSelectedRecipients());
+                serverConnection.sendMessage(msg);
+            }
+        }
     }
 }

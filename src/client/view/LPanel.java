@@ -1,11 +1,16 @@
 package client.view;
 
 import client.controller.ClientController;
+import client.controller.ServerConnection;
+import model.ServerUpdate;
+import model.User;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class LPanel extends JPanel {
     private ClientController controller;
@@ -15,9 +20,8 @@ public class LPanel extends JPanel {
     private JList<String> connectedUsers;
     private JList<String> contacts;
     private JLabel text;
-    private JButton sendButton;
 
-    public LPanel(ClientController controller, int width, int higth){
+    public LPanel(ClientController controller, ServerConnection serverConnection, int width, int higth){
         this.controller = controller;
         this.setSize(width, higth);
         this.setLayout(null);
@@ -51,24 +55,28 @@ public class LPanel extends JPanel {
         contacts.setSize(260, 230);
         add(contacts);
 
-        sendButton = new JButton("Skicka");
-        sendButton.setSize(90, 40);
-        sendButton.setLocation(20,560);
-        add(sendButton);
     }
 
-    private void addListeners() {
-        ActionListener listener = new ButtonActionListeners();
+    public String[] getSelectedRecipients(){
+        Object[] selected = connectedUsers.getSelectedValues();
 
-        sendButton.addActionListener(listener);
-    }
+        String[] recipientsList = new String[selected.length];
 
-    class ButtonActionListeners implements ActionListener {
-        public void actionPerformed(ActionEvent e)
-        {
-            if (e.getSource() == sendButton) {
-                //controller.sendButtonPressed();
-            }
+        for(int i=0; i<selected.length;i++){
+
+            recipientsList[i] = selected[i].toString();
+
         }
+
+        return recipientsList;
+    }
+
+    public void serverUpdate(ServerUpdate update) {
+        ArrayList<User> users = update.getConnectedList();
+        String[] userlist = new String[users.size()];
+        for(int i = 0; i < users.size(); i++){
+            userlist[i] = users.get(i).getUsername();
+        }
+        connectedUsers.setListData(userlist);
     }
 }

@@ -28,7 +28,9 @@ public class ServerConnection{
         new ClientInput().start();
     }
 
-
+    public User getUser(){
+        return user;
+    }
 
     public void sendMessage(Message msg){
         messagesToServer.put(msg);

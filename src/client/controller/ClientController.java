@@ -30,7 +30,7 @@ public class ClientController {
             Icon icon = new ImageIcon(loginWindow.getImagePath());
             login = new User(username, new ImageIcon(imagePath));
 
-            view = new MainFrame(this);
+            view = new MainFrame(this, serverConnection);
 
 
             String server = loginWindow.getServerName();
@@ -38,7 +38,8 @@ public class ClientController {
             serverConnection = new ServerConnection("127.0.0.1", 721, this, login);
 
             login.setUsername(loginWindow.getUsername());
-            login.setIcon(new javax.swing.ImageIcon(Objects.requireNonNull(getClass().getResource(loginWindow.getImagePath()))));
+            login.setIcon(icon);
+            view.setUser(login);
             //vet ej om detta funkar ^^^^?
         } else {
             System.exit(0);
@@ -48,6 +49,7 @@ public class ClientController {
     }
 
     public static void main(String[] args) throws IOException {
+        new ClientController();
         new ClientController();
     }
 
