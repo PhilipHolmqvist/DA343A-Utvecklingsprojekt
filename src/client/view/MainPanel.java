@@ -9,6 +9,8 @@ import java.awt.*;
 
 public class MainPanel extends JPanel {
     private ClientController controller;
+    private ServerUpdate serverUpdate;
+    private Message msg;
     private int width;
     private int hight;
 
@@ -40,10 +42,10 @@ public class MainPanel extends JPanel {
     }
 
     public void serverUpdate(ServerUpdate update) {
-        //Ska uppdatera listan på anslutna användare.
+        serverUpdate.getConnectedList();
     }
 
     public void displayMessage(Message msg) {
-        //Det har kommit ett nytt meddelande. Lägg till detta i RPanel så att man kan se det!
+        String.format("%s skriver: %s %s", msg.getSender(), msg.getText(), msg.getIcon());
     }
 }

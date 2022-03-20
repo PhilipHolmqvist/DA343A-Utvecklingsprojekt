@@ -15,7 +15,7 @@ public class RPanel extends JPanel {
     private ClientController controller;
     private int width;
     private int height;
-    private JTextArea chatWindow;
+    private JTextPane chatWindow;
     private JTextArea writeMessageWindow;
     private JButton sendMessage;
     private JButton choosePic;
@@ -30,7 +30,7 @@ public class RPanel extends JPanel {
     }
 
     private void setUp() {
-        chatWindow = new JTextArea();
+        chatWindow = new JTextPane();
         chatWindow.setLocation(40, 40);
         chatWindow.setSize(500, 400);
         chatWindow.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -72,7 +72,7 @@ public class RPanel extends JPanel {
 
 //        funkar inte men vill lägga till en liten förhandsvisning av bilen man väljer
 //        pic = new JLabel();
-//        pic.setSize(20,20);
+//        pic.setSize(10,10);
 //        pic.setLocation(200, 545);
 //        pic.setIcon(new ImageIcon("images/angry.png"));
 //        add(pic);
