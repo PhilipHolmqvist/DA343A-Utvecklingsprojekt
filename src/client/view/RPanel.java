@@ -140,7 +140,7 @@ public class RPanel extends JPanel {
     }
 
     public void newMessage(Message msg) {
-        String text = String.format("%s skriver: %s \n", msg.getSender(), msg.getText());
+        String text = String.format("%s %s skriver: %s \n", msg.getHourTime(), msg.getSender(), msg.getText());
         chatWindow.append(text);
     }
 
@@ -154,6 +154,7 @@ public class RPanel extends JPanel {
                 msg.setRecipients(leftpanel.getSelectedRecipients());
                 newMessage(msg);
                 controller.sendMessage(msg);
+                writeMessageWindow.setText("");
             }
         }
     }
