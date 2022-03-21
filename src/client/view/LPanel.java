@@ -20,12 +20,13 @@ public class LPanel extends JPanel {
     private JList<String> connectedUsers;
     private JList<String> contacts;
     private JLabel text;
+    private JButton addContact;
+    private JButton removeContact;
 
     public LPanel(ClientController controller, int width, int higth){
         this.controller = controller;
         this.setSize(width, higth);
         this.setLayout(null);
-        this.setBackground(Color.blue);
         setUp();
 
     }
@@ -44,16 +45,26 @@ public class LPanel extends JPanel {
         add(connectedUsers);
 
         text = new JLabel("Kontakter: ");
-        text.setLocation(20, 290);
+        text.setLocation(20, 350);
         text.setSize(90, 20);
         add(text);
 
         contacts = new JList<>();
         contacts.setBorder(BorderFactory.createLoweredBevelBorder());
-        contacts.setLocation(20, 310);
+        contacts.setLocation(20, 370);
         contacts.setBackground(new Color(192, 192, 192));
         contacts.setSize(260, 230);
         add(contacts);
+
+        addContact = new JButton("Lägg till");
+        addContact.setLocation(20, 300);
+        addContact.setSize(130, 40);
+        add(addContact);
+
+        removeContact = new JButton("Ta bort");
+        removeContact.setLocation(150, 300);
+        removeContact.setSize(130, 40);
+        add(removeContact);
 
     }
 

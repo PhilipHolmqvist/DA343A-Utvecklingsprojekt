@@ -12,7 +12,7 @@ import java.net.Socket;
 public class ServerConnection{
     private ClientController controller;
     private Socket socket;
-    private Buffer<Message> messagesToServer;
+    private Buffer<Object> messagesToServer;
     private User user;
     private MainPanel view;
 
@@ -22,7 +22,7 @@ public class ServerConnection{
     public ServerConnection(String ip, int port, ClientController controller, User user, MainPanel view) throws IOException {
         this.controller = controller;
         this.view = view;
-        messagesToServer = new Buffer<Message>();
+        messagesToServer = new Buffer<Object>();
         this.user = user;
         socket = new Socket(ip, port);
         new ClientOutput().start();
@@ -56,8 +56,8 @@ public class ServerConnection{
                 while(true){
                     //Väntar tills dess att tråden blir notifierad av bufferten.
                     //Den blir notifierad då det finns ett message i bufferten att hämta.
-                    Message msg = messagesToServer.get();
-                    oos.writeObject(msg);
+                    Object obj = messagesToServer.get();
+                    oos.writeObject(obj);
                     oos.flush();
 
                 }

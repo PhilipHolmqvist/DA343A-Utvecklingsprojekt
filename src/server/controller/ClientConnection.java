@@ -54,11 +54,20 @@ public class ClientConnection {
 
                 //Sedan kan klient bara skicka Message objekt.
                 while(true){
-                    Message msg = (Message) ois.readObject();
-                    if(msg.getText().equals("//disconnet")){
-                        controller.clientConnected(connection);
+                    Object obj = ois.readObject();
+
+                    if(obj instanceof Message){
+                        Message msg = (Message) obj;
+                        if(msg.getText().equals("//disconnect")){
+                            controller.clientDisconnected(connection);
+                        }
+                        controller.sendMessage(msg);
                     }
-                    controller.sendMessage(msg);
+
+                    if(obj instanceof User){
+                        //Jämför namnet med aktiva klienter. Där det matchar uppdatera den klientens kontakter.
+                    }
+
                 }
 
 
