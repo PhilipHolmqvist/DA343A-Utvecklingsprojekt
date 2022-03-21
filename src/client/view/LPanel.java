@@ -57,18 +57,10 @@ public class LPanel extends JPanel {
 
     }
 
-    public String[] getSelectedRecipients(){
-        Object[] selected = connectedUsers.getSelectedValues();
-
-        String[] recipientsList = new String[selected.length];
-
-        for(int i=0; i<selected.length;i++){
-
-            recipientsList[i] = selected[i].toString();
-
-        }
-
-        return recipientsList;
+    public ArrayList<String> getSelectedRecipients(){
+        ArrayList<String> selected = (ArrayList<String>) connectedUsers.getSelectedValuesList();
+        System.out.println("Valda mottagare index: " + selected.toString());
+        return selected;
     }
 
     public void serverUpdate(ServerUpdate update) {

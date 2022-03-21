@@ -2,12 +2,13 @@ package model;
 
 import javax.swing.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Message implements Serializable {
     private String text;
     private Icon icon;
     private User sender;
-    private String[] recipients;
+    private ArrayList<String> recipients;
 
     public Message(String text, Icon icon){
         this.text = text;
@@ -38,11 +39,11 @@ public class Message implements Serializable {
         this.sender = sender;
     }
 
-    public String[] getRecipients() {
+    public ArrayList<String> getRecipients() {
         return recipients;
     }
 
-    public void setRecipients(String[] recipients) {
+    public void setRecipients(ArrayList<String> recipients) {
         this.recipients = recipients;
     }
 }

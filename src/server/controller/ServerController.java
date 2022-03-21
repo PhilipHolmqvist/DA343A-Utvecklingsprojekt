@@ -29,11 +29,13 @@ public class ServerController {
     }
 
     public void sendMessage(Message msg){
-        String[] recipients = msg.getRecipients();
+        ArrayList<String> recipients = msg.getRecipients();
 
         for(int i = 0; i < activeClients.size(); i++){
-            if(activeClients.get(i).getUser().getUsername().equals(recipients[i])){
-                activeClients.get(i).newMsgForClient(msg);
+            for(int j = 0; j < recipients.size(); j++){
+                if(activeClients.get(i).getUser().getUsername().equals(recipients.get(j))){
+                    activeClients.get(i).newMsgForClient(msg);
+                }
             }
         }
     }
@@ -68,7 +70,6 @@ public class ServerController {
         public void run() {
             Socket socket = null;
             System.out.println("Server, tråd #1 startad");
-            logger.log("hej");
             try (ServerSocket serverSocket = new ServerSocket(port)) { //Skapar en serverSocket med porten
                 while(true) {
                     try {

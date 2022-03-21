@@ -47,8 +47,7 @@ public class MainPanel extends JPanel {
     }
 
     public void displayMessage(Message msg) {
-        String text = String.format("%s skriver: %s", msg.getSender(), msg.getText());
-        rightPanel.newMessage(text);
+        rightPanel.newMessage(msg);
     }
 
     public void setUser(User login) {

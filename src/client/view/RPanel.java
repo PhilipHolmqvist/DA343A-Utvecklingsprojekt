@@ -139,8 +139,9 @@ public class RPanel extends JPanel {
         sendMessage.addActionListener(listener);
     }
 
-    public void newMessage(String msg) {
-        chatWindow.append(msg);
+    public void newMessage(Message msg) {
+        String text = String.format("%s skriver: %s \n", msg.getSender(), msg.getText());
+        chatWindow.append(text);
     }
 
     class ButtonActionListeners implements ActionListener {
@@ -151,6 +152,7 @@ public class RPanel extends JPanel {
                 Message msg = new Message(writeMessageWindow.getText(), null);
                 msg.setSender(controller.getUser());
                 msg.setRecipients(leftpanel.getSelectedRecipients());
+                newMessage(msg);
                 controller.sendMessage(msg);
             }
         }
