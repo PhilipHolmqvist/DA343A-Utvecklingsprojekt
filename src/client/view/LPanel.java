@@ -23,6 +23,7 @@ public class LPanel extends JPanel {
     private JLabel text;
     private JButton addContact;
     private JButton removeContact;
+    private DefaultListModel<String> contactList;
 
     public LPanel(ClientController controller, int width, int higth){
         this.controller = controller;
@@ -50,7 +51,9 @@ public class LPanel extends JPanel {
         text.setSize(90, 20);
         add(text);
 
-        contacts = new JList<>();
+
+        contactList = new DefaultListModel<>();
+        contacts = new JList<>(contactList);
         contacts.setBorder(BorderFactory.createLoweredBevelBorder());
         contacts.setLocation(20, 370);
         contacts.setBackground(new Color(192, 192, 192));
@@ -85,9 +88,10 @@ public class LPanel extends JPanel {
     }
 
     public ArrayList<String> getSelectedRecipients(){
-        ArrayList<String> selected = (ArrayList<String>) connectedUsers.getSelectedValuesList();
-        System.out.println("Valda mottagare index: " + selected.toString());
-        return selected;
+        ArrayList<String> selectedRecipients = new ArrayList<>();
+        selectedRecipients.addAll(connectedUsers.getSelectedValuesList());
+        selectedRecipients.addAll(contacts.getSelectedValuesList());
+        return selectedRecipients;
     }
 
     public void serverUpdate(ServerUpdate update) {
@@ -113,20 +117,14 @@ public class LPanel extends JPanel {
         public void actionPerformed(ActionEvent e)
         {
             if (e.getSource() == addContact) {
-                controller.addContact(connectedUsers.getSelectedValuesList());
-                newContactAdded(connectedUsers.getSelectedValuesList());
+                contactList.addElement(connectedUsers.getSelectedValue());
+                System.out.println("Lägger nu till " + connectedUsers.getSelectedValue() + " som en kontakt");
+                controller.addContact(connectedUsers.getSelectedValue());
             }
             else if (e.getSource()== removeContact) {
-                controller.removeContact(connectedUsers.getSelectedValuesList());
-                contactsRemoved(connectedUsers.getSelectedValuesList());
+                contactList.removeElement(connectedUsers.getSelectedValue());
+                controller.removeContact(connectedUsers.getSelectedValue());
             }
         }
-    }
-
-    private void contactsRemoved(List<String> selectedValuesList) {
-    }
-
-    private void newContactAdded(List<String> selectedValuesList) {
-
     }
 }

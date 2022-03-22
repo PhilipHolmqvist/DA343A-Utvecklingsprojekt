@@ -148,13 +148,11 @@ public class RPanel extends JPanel {
         public void actionPerformed(ActionEvent e)
         {
             if (e.getSource() == sendMessage) {
-                                                                    //Lägg till om man ska skicka en bild här, byta ut null.
-                Message msg = new Message(writeMessageWindow.getText(), null);
-                msg.setSender(controller.getUser());
-                msg.setRecipients(leftpanel.getSelectedRecipients());
-                newMessage(msg);
-                controller.sendMessage(msg);
+                controller.sendMessage(writeMessageWindow.getText(), leftpanel.getSelectedRecipients());
                 writeMessageWindow.setText("");
+
+
+
             }
         }
     }

@@ -11,11 +11,9 @@ public class Message implements Serializable {
     private User sender;
     private String hourTime;
     private String dateTime;
-    private ArrayList<String> recipients;
+    private ArrayList<User> recipients;
 
-    public Message(String text, Icon icon){
-        this.text = text;
-        this.icon = icon;
+    public Message(){
 
         LocalDateTime currTime = LocalDateTime.now();
         int year = currTime.getYear();
@@ -52,9 +50,9 @@ public class Message implements Serializable {
         this.sender = sender;
     }
 
-    public ArrayList<String> getRecipients() {return recipients;}
+    public ArrayList<User> getRecipients() {return recipients;}
 
-    public void setRecipients(ArrayList<String> recipients) {
+    public void setRecipients(ArrayList<User> recipients) {
         this.recipients = recipients;
     }
 

@@ -41,7 +41,7 @@ public class MainFrame extends JFrame {
 
 
     public void displayNewMessage(Message msg) {
-        System.out.println(msg.getText());
+       mainPanel.displayMessage(msg);
     }
 
     public void setUser(User login) {

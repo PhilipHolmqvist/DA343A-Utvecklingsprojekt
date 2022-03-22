@@ -7,11 +7,6 @@ public class ServerUpdate implements Serializable {
     private User newUserConnected;
     private ArrayList<User> connectedList;
 
-    //public ServerUpdate(User newUserConnected, ArrayList<User> connectedList){
-      //  this.newUserConnected = newUserConnected;
-        //this.connectedList = connectedList;
-    //}
-
     public ServerUpdate(){
 
     }

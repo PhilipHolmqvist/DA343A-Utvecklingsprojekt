@@ -18,7 +18,6 @@ public class ClientConnection {
         this.socket = socket;
         this.controller = controller;
         objectsToSend = new Buffer<Object>();
-        System.out.println("Startar strömmarna");
         new ClientInput(this).start();
         new ClientOutput().start();
     }
@@ -35,7 +34,7 @@ public class ClientConnection {
         this.user = user;
     }
 
-    public void newServerUpdate(ServerUpdate update) {
+    public void newServerUpdate(Object update) {
         objectsToSend.put(update);
     }
 
@@ -63,17 +62,19 @@ public class ClientConnection {
                     if(obj instanceof Message){
                         Message msg = (Message) obj;
                         if(msg.getText().equals("//disconnect")){
-                            controller.clientDisconnected(connection);
+                            controller.clientDisconnected(user);
                             System.out.println("En klient disconnetar!");
+
+                        }else{
+                            controller.sendMessage(msg);
                         }
-                        controller.sendMessage(msg);
                     }
 
                     if(obj instanceof User){
                         //Jämför namnet med aktiva klienter. Där det matchar uppdatera den klientens kontakter.
-                        User user = (User) obj;
-                        controller.updateActiveClientUser(user);
-                        System.out.println("Uppdaterar en aktiv client!");
+                        User user23 = (User) obj;
+                        System.out.println(user23.getContacts());
+                        controller.updateActiveClientUser(user23, connection);
                     }
 
                 }
@@ -81,6 +82,7 @@ public class ClientConnection {
 
             }catch (Exception e){
                 e.printStackTrace();
+                controller.clientDisconnected(user);
             }
         }
     }
@@ -91,17 +93,11 @@ public class ClientConnection {
         public void run(){
             try{
                 oos = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-                oos.writeObject(objectsToSend.get());
-                oos.flush();
-
                 while(true){
                     oos.writeObject(objectsToSend.get());
                     oos.flush();
                     System.out.println("Skickat något till klient");
                 }
-
-
-
             }catch (Exception e){
                 e.printStackTrace();
             }

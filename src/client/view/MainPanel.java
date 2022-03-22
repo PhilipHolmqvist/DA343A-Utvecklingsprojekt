@@ -8,6 +8,7 @@ import model.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class MainPanel extends JPanel {
     private ClientController controller;
@@ -52,5 +53,9 @@ public class MainPanel extends JPanel {
 
     public void setUser(User login) {
         rightPanel.setUser(login);
+    }
+
+    public void setContacts(ArrayList<String> contacts) {
+        leftPanel.setContacts(contacts);
     }
 }

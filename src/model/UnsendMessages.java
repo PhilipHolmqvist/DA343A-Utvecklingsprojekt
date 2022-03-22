@@ -25,4 +25,8 @@ public class UnsendMessages {
         return unsentMsgsToUser;
     }
 
+    public synchronized boolean contains(User user){
+        return unsedMessages.containsKey(user);
+    }
+
 }

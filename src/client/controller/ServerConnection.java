@@ -1,10 +1,7 @@
 package client.controller;
 
 import client.view.MainPanel;
-import model.Buffer;
-import model.Message;
-import model.ServerUpdate;
-import model.User;
+import model.*;
 
 import java.io.*;
 import java.net.Socket;
@@ -22,8 +19,8 @@ public class ServerConnection{
     public ServerConnection(String ip, int port, ClientController controller, User user, MainPanel view) throws IOException {
         this.controller = controller;
         this.view = view;
-        messagesToServer = new Buffer<Object>();
         this.user = user;
+        messagesToServer = new Buffer<Object>();
         socket = new Socket(ip, port);
         new ClientOutput().start();
         new ClientInput().start();
@@ -38,12 +35,17 @@ public class ServerConnection{
     }
 
     public void clientDisconnecting() {
-        Message msg = new Message("//disconnect", null);
+        Message msg = new Message();
+        msg.setText("//disconnect");
         messagesToServer.put(msg);
     }
 
-    public void sendUser(User user){
+    public void sendUser(){
         messagesToServer.put(user);
+    }
+
+    public void addContacts(){
+        this.user.addContact("Johan");
     }
 
 
@@ -62,6 +64,14 @@ public class ServerConnection{
                     //Väntar tills dess att tråden blir notifierad av bufferten.
                     //Den blir notifierad då det finns ett message i bufferten att hämta.
                     Object obj = messagesToServer.get();
+                    if(obj instanceof Message){
+                        Message msg = (Message) obj;
+                        if(msg.getText().equals("//disconnect")){
+                            oos.writeObject(msg);
+                            oos.flush();
+                            System.exit(0);
+                        }
+                    }
                     oos.writeObject(obj);
                     oos.flush();
 
@@ -92,6 +102,14 @@ public class ServerConnection{
                         ServerUpdate update = (ServerUpdate) obj;
                         view.serverUpdate(update);
                     }
+                    if(obj instanceof ContactListUpdate){
+                        //Clienten fick veta vilka contakter den har
+                        System.out.println("Clienten fick en kontaktuppdatering!");
+                        ContactListUpdate update = (ContactListUpdate) obj;
+                        System.out.println(update.getContacts());
+                        user.setContacts(update.getContacts());
+                        view.setContacts(update.getContacts());
+                    }
 
                     if(obj instanceof Message){
                         //Nytt meddelande. Displaya det i view.
@@ -101,7 +119,7 @@ public class ServerConnection{
                     }
                 }
 
-            }catch (Exception e){
+            }catch (Exception e) {
                 e.printStackTrace();
             }
 
