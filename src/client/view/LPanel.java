@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class LPanel extends JPanel {
     private ClientController controller;
@@ -66,6 +67,21 @@ public class LPanel extends JPanel {
         removeContact.setSize(130, 40);
         add(removeContact);
 
+        addListeners();
+    }
+
+    public void setContacts(ArrayList<String> listOfContacts){
+        String[] list = new String[listOfContacts.size()];
+        for(int i = 0; i < listOfContacts.size(); i++){
+            list[i] = listOfContacts.get(i);
+        }
+        contacts.setListData(list);
+    }
+
+    private void addListeners() {
+        ActionListener listener = new ButtonActionListeners();
+        addContact.addActionListener(listener);
+        removeContact.addActionListener(listener);
     }
 
     public ArrayList<String> getSelectedRecipients(){
@@ -76,19 +92,41 @@ public class LPanel extends JPanel {
 
     public void serverUpdate(ServerUpdate update) {
 
-
         System.out.println(update.getConnectedList());
         System.out.println(update.getNewUserConnected());
 
         ArrayList<User> users = update.getConnectedList();
+        User thisUser = controller.getServerConnection().getUser();
+
         String[] userlist = new String[users.size()];
         for(int i = 0; i < users.size(); i++){
-            userlist[i] = users.get(i).getUsername();
+            if(!users.get(i).getUsername().equals(thisUser.getUsername())){
+                userlist[i] = users.get(i).getUsername();
+            }
+
         }
-
         connectedUsers.setListData(userlist);
+    }
 
+    //Om en knapp trycks, anropa controller.
+    class ButtonActionListeners implements ActionListener {
+        public void actionPerformed(ActionEvent e)
+        {
+            if (e.getSource() == addContact) {
+                controller.addContact(connectedUsers.getSelectedValuesList());
+                newContactAdded(connectedUsers.getSelectedValuesList());
+            }
+            else if (e.getSource()== removeContact) {
+                controller.removeContact(connectedUsers.getSelectedValuesList());
+                contactsRemoved(connectedUsers.getSelectedValuesList());
+            }
+        }
+    }
 
+    private void contactsRemoved(List<String> selectedValuesList) {
+    }
+
+    private void newContactAdded(List<String> selectedValuesList) {
 
     }
 }

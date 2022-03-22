@@ -24,6 +24,7 @@ public class ServerController {
         this.view = new MainFrame(this, 900, 600);
         this.logger = new Logger();
         activeClients = new ArrayList<ClientConnection>();
+        logger.log("Server online");
         new Connection(721, this).start();
         new UpdateHandeler(this).start();
     }
@@ -35,6 +36,7 @@ public class ServerController {
             for(int j = 0; j < recipients.size(); j++){
                 if(activeClients.get(i).getUser().getUsername().equals(recipients.get(j))){
                     activeClients.get(i).newMsgForClient(msg);
+                    logger.log("Msg från " + msg.getSender() + " till " + msg.getRecipients());
                 }
             }
         }
@@ -70,6 +72,7 @@ public class ServerController {
         public void run() {
             Socket socket = null;
             System.out.println("Server, tråd #1 startad");
+            logger.log("Server online.");
             try (ServerSocket serverSocket = new ServerSocket(port)) { //Skapar en serverSocket med porten
                 while(true) {
                     try {
@@ -77,6 +80,7 @@ public class ServerController {
                         System.out.println("ny klient accepterad");
                         client = new ClientConnection(socket, controller); //en ny instans av clientHandler instanseras med socket som parameter.
                         activeClients.add(client);
+
 
                     } catch(IOException e) {
                         System.err.println(e);
@@ -109,6 +113,7 @@ public class ServerController {
                 if(newUpdate != update){
                     this.update = newUpdate;
                     System.out.println("Update");
+                    logger.log("Server skickade en uppdatering till samtliga klienter.");
                     controller.sendServerUpdateToClients(update);
                 }
             }
@@ -150,6 +155,16 @@ public class ServerController {
 
     public void clientConnected(ClientConnection client){
         this.latestClientConnected = client;
+        logger.log("Ny klient online: " + client.getUser().getUsername());
+        createServerUpdate();
+    }
+
+    public void updateActiveClientUser(User user){
+        for(int i = 0; i < activeClients.size(); i++){
+            if(activeClients.get(i).getUser().getUsername().equals(user.getUsername())){
+                activeClients.get(i).setUser(user);
+            }
+        }
         createServerUpdate();
     }
 

@@ -38,7 +38,12 @@ public class ServerConnection{
     }
 
     public void clientDisconnecting() {
-        Message msg = new Message("//disconnet", null);
+        Message msg = new Message("//disconnect", null);
+        messagesToServer.put(msg);
+    }
+
+    public void sendUser(User user){
+        messagesToServer.put(user);
     }
 
 

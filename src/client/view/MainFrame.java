@@ -27,7 +27,7 @@ public class MainFrame extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 controller.clientDisconnecting();
-                System.exit(0);
+                System.out.println("Client vill avsluta");
 
             }
         });

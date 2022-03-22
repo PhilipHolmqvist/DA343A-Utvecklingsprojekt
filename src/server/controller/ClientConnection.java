@@ -31,6 +31,10 @@ public class ClientConnection {
         return user;
     }
 
+    public void setUser(User user){
+        this.user = user;
+    }
+
     public void newServerUpdate(ServerUpdate update) {
         objectsToSend.put(update);
     }
@@ -60,12 +64,16 @@ public class ClientConnection {
                         Message msg = (Message) obj;
                         if(msg.getText().equals("//disconnect")){
                             controller.clientDisconnected(connection);
+                            System.out.println("En klient disconnetar!");
                         }
                         controller.sendMessage(msg);
                     }
 
                     if(obj instanceof User){
                         //Jämför namnet med aktiva klienter. Där det matchar uppdatera den klientens kontakter.
+                        User user = (User) obj;
+                        controller.updateActiveClientUser(user);
+                        System.out.println("Uppdaterar en aktiv client!");
                     }
 
                 }
